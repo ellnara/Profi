@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Profi.DAL;
+using Profi.Helpers;
 using Profi.Models;
+using Profi.ViewModel.Testimonial;
 
 namespace Profi.Areas.AdminPanel.Controllers
 {
@@ -14,59 +17,63 @@ namespace Profi.Areas.AdminPanel.Controllers
     public class TestimonialsController : Controller
     {
         private readonly AppDbContext _context;
+        private IWebHostEnvironment _env { get; }
 
-        public TestimonialsController(AppDbContext context)
+        public TestimonialsController(AppDbContext context,IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
-        // GET: AdminPanel/Testimonials
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Testimonials.ToListAsync());
+            return View(_context.Testimonials.ToList());
         }
-
-        // GET: AdminPanel/Testimonials/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var testimonial = await _context.Testimonials
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (testimonial == null)
-            {
-                return NotFound();
-            }
-
-            return View(testimonial);
-        }
-
-        // GET: AdminPanel/Testimonials/Create
         public IActionResult Create()
         {
             return View();
         }
-
-        // POST: AdminPanel/Testimonials/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Url,Name,OperationName,Comment,Stars")] Testimonial testimonial)
+        public async Task<IActionResult> Create(TestimonialCreateVM testimonial)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(testimonial);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View();
             }
-            return View(testimonial);
+            Testimonial newTestimonial = new Testimonial
+            {
+                Url = testimonial.Photo.FileName,
+                Name = testimonial.Name,
+                OperationName = testimonial.OperationName,
+                Comment = testimonial.Comment,
+                Stars = testimonial.Stars
+            };
+            await _context.Testimonials.AddAsync(newTestimonial);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
-        // GET: AdminPanel/Testimonials/Edit/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            var testimonial = _context.Testimonials.Find(id);
+            if (testimonial == null)
+            {
+                return NotFound();
+            }
+            var path = Helper.GetPath(_env.WebRootPath, "img", testimonial.Url);
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+            _context.Testimonials.Remove(testimonial);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,12 +89,9 @@ namespace Profi.Areas.AdminPanel.Controllers
             return View(testimonial);
         }
 
-        // POST: AdminPanel/Testimonials/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Url,Name,OperationName,Comment,Stars")] Testimonial testimonial)
+        public async Task<IActionResult> Edit(Testimonial testimonial,int? id)
         {
             if (id != testimonial.Id)
             {
@@ -96,59 +100,11 @@ namespace Profi.Areas.AdminPanel.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
                     _context.Update(testimonial);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TestimonialExists(testimonial.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(testimonial);
-        }
-
-        // GET: AdminPanel/Testimonials/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var testimonial = await _context.Testimonials
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (testimonial == null)
-            {
-                return NotFound();
-            }
-
-            return View(testimonial);
-        }
-
-        // POST: AdminPanel/Testimonials/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var testimonial = await _context.Testimonials.FindAsync(id);
-            _context.Testimonials.Remove(testimonial);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool TestimonialExists(int id)
-        {
-            return _context.Testimonials.Any(e => e.Id == id);
         }
     }
 }

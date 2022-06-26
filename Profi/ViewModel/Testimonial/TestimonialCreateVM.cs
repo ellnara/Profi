@@ -13,9 +13,13 @@ namespace Profi.ViewModel.Testimonial
     {
         [Required]
         public string Name { get; set; }
+        [Required]
         public string Comment { get; set; }
+        [Required]
         public string OperationName { get; set; }
+        [Required]
         public float Stars { get; set; }
+        [Required]
         public IFormFile Photo { get; set; }
     }
 }

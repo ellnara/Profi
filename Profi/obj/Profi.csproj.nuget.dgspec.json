@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Samedova\\source\\repos\\Profi\\Profi\\Profi.csproj": {}
+    "C:\\Users\\HP\\Source\\Repos\\Profi\\Profi\\Profi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Samedova\\source\\repos\\Profi\\Profi\\Profi.csproj": {
+    "C:\\Users\\HP\\Source\\Repos\\Profi\\Profi\\Profi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Samedova\\source\\repos\\Profi\\Profi\\Profi.csproj",
+        "projectUniqueName": "C:\\Users\\HP\\Source\\Repos\\Profi\\Profi\\Profi.csproj",
         "projectName": "Profi",
-        "projectPath": "C:\\Users\\Samedova\\source\\repos\\Profi\\Profi\\Profi.csproj",
-        "packagesPath": "C:\\Users\\Samedova\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Samedova\\source\\repos\\Profi\\Profi\\obj\\",
+        "projectPath": "C:\\Users\\HP\\Source\\Repos\\Profi\\Profi\\Profi.csproj",
+        "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\HP\\Source\\Repos\\Profi\\Profi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Samedova\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -44,19 +44,23 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.26, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[3.1.26, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[3.1.25, )"
+              "version": "[3.1.26, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[3.1.25, )"
+              "version": "[3.1.26, )"
             },
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
@@ -81,7 +85,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.406\\RuntimeIdentifierGraph.json"
         }
       }
     }
